@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useInView } from '@/hooks/useInView';
 import { experience } from '@/lib/constants';
+import TechIcon from '@/components/TechIcon';
 
 export default function Experience() {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -148,7 +149,11 @@ export default function Experience() {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {active.skills.map((skill) => (
-                    <span key={skill} className="skill-tag">
+                    <span
+                      key={skill}
+                      className="inline-flex items-center gap-1.5 skill-tag"
+                    >
+                      <TechIcon name={skill} size={13} />
                       {skill}
                     </span>
                   ))}

@@ -1,61 +1,61 @@
 'use client';
 import { useInView } from '@/hooks/useInView';
 import { skills } from '@/lib/constants';
+import TechIcon from '@/components/TechIcon';
 
-const categoryConfig: Record<string, { label: string; color: string; icon: string }> = {
-  frontend: {
-    label: 'Frontend',
-    color: 'rgba(0, 198, 255, 0.15)',
-    icon: '⬡',
-  },
-  backend: {
-    label: 'Backend',
-    color: 'rgba(168, 85, 247, 0.15)',
-    icon: '⬡',
-  },
-  database: {
-    label: 'Database',
-    color: 'rgba(16, 185, 129, 0.15)',
-    icon: '⬡',
-  },
-  devops: {
-    label: 'DevOps & Infrastructure',
-    color: 'rgba(245, 158, 11, 0.15)',
-    icon: '⬡',
-  },
-  tools: {
-    label: 'Tools & Integrations',
-    color: 'rgba(236, 72, 153, 0.15)',
-    icon: '⬡',
-  },
-  practices: {
-    label: 'Practices',
-    color: 'rgba(99, 102, 241, 0.15)',
-    icon: '⬡',
-  },
+const categoryConfig: Record<string, { label: string; accent: string }> = {
+  frontend:  { label: 'Frontend',               accent: '#00c6ff' },
+  backend:   { label: 'Backend',                accent: '#a855f7' },
+  database:  { label: 'Database',               accent: '#10b981' },
+  devops:    { label: 'DevOps & Infrastructure', accent: '#f59e0b' },
+  tools:     { label: 'Tools & Integrations',   accent: '#ec4899' },
+  practices: { label: 'Practices',              accent: '#6366f1' },
 };
 
-const categoryAccent: Record<string, string> = {
-  frontend: '#00c6ff',
-  backend: '#a855f7',
-  database: '#10b981',
-  devops: '#f59e0b',
-  tools: '#ec4899',
-  practices: '#6366f1',
-};
+function getCategoryIcon(category: string, color: string) {
+  const s = { color, width: 16, height: 16 };
+  switch (category) {
+    case 'frontend': return (
+      <svg {...s} viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    );
+    case 'backend': return (
+      <svg {...s} viewBox="0 0 24 24" fill="none">
+        <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    );
+    case 'database': return (
+      <svg {...s} viewBox="0 0 24 24" fill="none">
+        <ellipse cx="12" cy="5" rx="9" ry="3" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    );
+    case 'devops': return (
+      <svg {...s} viewBox="0 0 24 24" fill="none">
+        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    );
+    case 'tools': return (
+      <svg {...s} viewBox="0 0 24 24" fill="none">
+        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    );
+    case 'practices': return (
+      <svg {...s} viewBox="0 0 24 24" fill="none">
+        <path d="M9 11l3 3L22 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    );
+    default: return null;
+  }
+}
 
-function SkillCard({
-  category,
-  items,
-  delay,
-}: {
-  category: string;
-  items: string[];
-  delay: number;
-}) {
-  const { ref, isInView } = useInView(0.1);
-  const cfg = categoryConfig[category];
-  const accent = categoryAccent[category];
+function SkillCard({ category, items, delay }: { category: string; items: string[]; delay: number }) {
+  const { ref, isInView } = useInView(0.08);
+  const { label, accent } = categoryConfig[category];
 
   return (
     <div
@@ -67,40 +67,45 @@ function SkillCard({
         transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
       }}
     >
-      {/* Header */}
+      {/* Category header */}
       <div className="flex items-center gap-3 mb-5">
         <div
-          className="w-9 h-9 rounded-lg flex items-center justify-center text-base shrink-0"
-          style={{ background: cfg.color, border: `1px solid ${accent}25` }}
+          className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+          style={{ background: `${accent}14`, border: `1px solid ${accent}22` }}
         >
           {getCategoryIcon(category, accent)}
         </div>
-        <h3 className="font-semibold text-sm tracking-wide" style={{ color: '#e2e8f0' }}>
-          {cfg.label}
+        <h3 className="font-semibold text-sm" style={{ color: '#e2e8f0' }}>
+          {label}
         </h3>
       </div>
 
-      {/* Tags */}
+      {/* Skill tags with icons */}
       <div className="flex flex-wrap gap-2">
         {items.map((skill) => (
           <span
             key={skill}
-            className="px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 cursor-default"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium cursor-default select-none transition-all duration-200"
             style={{
-              background: `${accent}10`,
-              border: `1px solid ${accent}25`,
-              color: `${accent}`,
+              background: `${accent}0d`,
+              border: `1px solid ${accent}22`,
+              color: accent,
               fontFamily: 'var(--font-geist-mono)',
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = `${accent}20`;
-              (e.currentTarget as HTMLElement).style.borderColor = `${accent}60`;
+              const el = e.currentTarget as HTMLElement;
+              el.style.background = `${accent}1f`;
+              el.style.borderColor = `${accent}55`;
+              el.style.transform = 'translateY(-1px)';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = `${accent}10`;
-              (e.currentTarget as HTMLElement).style.borderColor = `${accent}25`;
+              const el = e.currentTarget as HTMLElement;
+              el.style.background = `${accent}0d`;
+              el.style.borderColor = `${accent}22`;
+              el.style.transform = 'translateY(0)';
             }}
           >
+            <TechIcon name={skill} size={14} />
             {skill}
           </span>
         ))}
@@ -109,62 +114,12 @@ function SkillCard({
   );
 }
 
-function getCategoryIcon(category: string, color: string) {
-  const iconProps = { width: 16, height: 16, style: { color } };
-  switch (category) {
-    case 'frontend':
-      return (
-        <svg {...iconProps} viewBox="0 0 24 24" fill="none">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    case 'backend':
-      return (
-        <svg {...iconProps} viewBox="0 0 24 24" fill="none">
-          <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-          <path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        </svg>
-      );
-    case 'database':
-      return (
-        <svg {...iconProps} viewBox="0 0 24 24" fill="none">
-          <ellipse cx="12" cy="5" rx="9" ry="3" stroke="currentColor" strokeWidth="1.5"/>
-          <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="currentColor" strokeWidth="1.5"/>
-          <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" stroke="currentColor" strokeWidth="1.5"/>
-        </svg>
-      );
-    case 'devops':
-      return (
-        <svg {...iconProps} viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5"/>
-          <path d="M12 8v4l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        </svg>
-      );
-    case 'tools':
-      return (
-        <svg {...iconProps} viewBox="0 0 24 24" fill="none">
-          <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    case 'practices':
-      return (
-        <svg {...iconProps} viewBox="0 0 24 24" fill="none">
-          <path d="M9 11l3 3L22 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    default:
-      return null;
-  }
-}
-
 export default function Skills() {
   const { ref, isInView } = useInView();
 
   return (
     <section id="skills" className="py-28 px-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div
           ref={ref}
           className="text-center mb-16"
@@ -190,15 +145,9 @@ export default function Skills() {
           </p>
         </div>
 
-        {/* Skills grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {Object.entries(skills).map(([category, items], i) => (
-            <SkillCard
-              key={category}
-              category={category}
-              items={items}
-              delay={i * 80}
-            />
+            <SkillCard key={category} category={category} items={items} delay={i * 80} />
           ))}
         </div>
       </div>
