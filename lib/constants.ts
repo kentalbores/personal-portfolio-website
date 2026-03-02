@@ -118,11 +118,15 @@ export interface Project {
 }
 
 /**
- * To add media to a project, drop files into /public/projects/{id}/
- * Supported formats: .png .jpg .webp .gif for images; .mp4 .webm for videos
- * Example:
- *   /public/projects/chronos/demo.mp4
- *   /public/projects/chronos/screenshot-1.png
+ * DROP YOUR MEDIA FILES into /public/projects/{id}/ then add entries here.
+ *
+ * Example — once you have the files:
+ *   media: [
+ *     { type: 'video', src: '/projects/chronos/demo.mp4',         caption: 'Live Demo' },
+ *     { type: 'image', src: '/projects/chronos/screenshot-1.png', caption: 'Dashboard' },
+ *   ]
+ *
+ * Supported: .mp4 .webm for video · .png .jpg .webp for images
  */
 export const projects: Project[] = [
   {
@@ -134,11 +138,7 @@ export const projects: Project[] = [
       'Led backend development for an enterprise HR platform with RFID time-in, leave management, and performance tracking. Architected the system and deployed across AWS EC2, Render, and HuggingFace.',
     skills: ['FastAPI', 'Angular', 'Docker', 'AWS EC2', 'Auth0', 'Supabase', 'OpenSearch'],
     link: null,
-    media: [
-      { type: 'video',  src: '/projects/chronos/demo.mp4',           caption: 'Live Demo' },
-      { type: 'image',  src: '/projects/chronos/screenshot-1.png',   caption: 'Dashboard' },
-      { type: 'image',  src: '/projects/chronos/screenshot-2.png',   caption: 'Attendance View' },
-    ],
+    media: [],
   },
   {
     id: 'raspi-failsafe',
@@ -149,10 +149,7 @@ export const projects: Project[] = [
       'Engineered a failsafe for Pi 5: auto-detects drive corruption, boots from a backup flash drive, repairs the main OS, and restores the full application — surviving even a forced rm -rf.',
     skills: ['Raspberry Pi', 'Linux', 'Bash', 'systemd', 'Embedded Systems'],
     link: null,
-    media: [
-      { type: 'video', src: '/projects/raspi-failsafe/demo.mp4',        caption: 'Recovery Demo' },
-      { type: 'image', src: '/projects/raspi-failsafe/screenshot-1.png', caption: 'Boot Sequence' },
-    ],
+    media: [],
   },
   {
     id: 'ubuntu-server',
@@ -163,10 +160,7 @@ export const projects: Project[] = [
       'Repurposed a spare ThinkPad as a personal Ubuntu server hosting all personal projects, an n8n instance, and web services via Nginx + Cloudflare.',
     skills: ['Linux', 'Ubuntu', 'Nginx', 'Docker', 'Cloudflare', 'Tailscale'],
     link: null,
-    media: [
-      { type: 'image', src: '/projects/ubuntu-server/screenshot-1.png', caption: 'Server Dashboard' },
-      { type: 'image', src: '/projects/ubuntu-server/screenshot-2.png', caption: 'n8n Instance' },
-    ],
+    media: [],
   },
   {
     id: 'resume-builder',
@@ -177,10 +171,7 @@ export const projects: Project[] = [
       'NLP-powered resume builder that curates role-specific resumes from personal data using TF-IDF scoring and dynamic HTML templates.',
     skills: ['Node.js', 'JavaScript', 'NLP', 'HTML', 'Automation'],
     link: null,
-    media: [
-      { type: 'video', src: '/projects/resume-builder/demo.mp4',         caption: 'Demo' },
-      { type: 'image', src: '/projects/resume-builder/screenshot-1.png', caption: 'Output Resume' },
-    ],
+    media: [],
   },
   {
     id: 'portfolio',
@@ -190,9 +181,7 @@ export const projects: Project[] = [
     description: 'Designed and built a personal portfolio site showcasing projects and experience.',
     skills: ['JavaScript', 'HTML', 'CSS', 'Web Design'],
     link: 'https://kentalbores.xyz',
-    media: [
-      { type: 'image', src: '/projects/portfolio/screenshot-1.png', caption: 'Homepage' },
-    ],
+    media: [],
   },
   {
     id: 'ecommerce',
@@ -202,10 +191,7 @@ export const projects: Project[] = [
     description: "Built a full e-commerce website for the family's business to expand online sales.",
     skills: ['JavaScript', 'HTML', 'CSS', 'E-commerce'],
     link: null,
-    media: [
-      { type: 'image', src: '/projects/ecommerce/screenshot-1.png', caption: 'Store Front' },
-      { type: 'image', src: '/projects/ecommerce/screenshot-2.png', caption: 'Product Page' },
-    ],
+    media: [],
   },
   {
     id: 'telegram-bot',
@@ -215,9 +201,7 @@ export const projects: Project[] = [
     description: 'Telegram bot for automated personal expense logging and tracking via chat commands.',
     skills: ['Python', 'Telegram API', 'Bot Development'],
     link: null,
-    media: [
-      { type: 'image', src: '/projects/telegram-bot/screenshot-1.png', caption: 'Bot in Action' },
-    ],
+    media: [],
   },
   {
     id: 'auto-id',
@@ -228,9 +212,7 @@ export const projects: Project[] = [
       'Python script that auto-removes backgrounds from ID photos and generates print-ready layouts, replacing a manual Photoshop workflow.',
     skills: ['Python', 'Image Processing', 'Automation', 'Pillow'],
     link: null,
-    media: [
-      { type: 'image', src: '/projects/auto-id/screenshot-1.png', caption: 'Before / After' },
-    ],
+    media: [],
   },
   {
     id: 'minecraft',
@@ -241,10 +223,7 @@ export const projects: Project[] = [
       'Java desktop app with a UI for autoclicking, directional auto-mining, and auto-fishing using Java AWT Robot and JNativeHook.',
     skills: ['Java', 'Java AWT', 'JNativeHook', 'Swing'],
     link: null,
-    media: [
-      { type: 'video', src: '/projects/minecraft/demo.mp4',         caption: 'Demo' },
-      { type: 'image', src: '/projects/minecraft/screenshot-1.png', caption: 'UI' },
-    ],
+    media: [],
   },
   {
     id: 'flappy-bird',
@@ -254,10 +233,7 @@ export const projects: Project[] = [
     description: 'Recreated Flappy Bird in Godot with GDScript, implementing game loops and physics.',
     skills: ['Godot', 'GDScript', 'Game Development'],
     link: null,
-    media: [
-      { type: 'video', src: '/projects/flappy-bird/demo.mp4',         caption: 'Gameplay' },
-      { type: 'image', src: '/projects/flappy-bird/screenshot-1.png', caption: 'Screenshot' },
-    ],
+    media: [],
   },
   {
     id: 'roguelike',
@@ -267,10 +243,7 @@ export const projects: Project[] = [
     description: 'Top-down roguelike shooter in Unity with procedural level elements and C# gameplay logic.',
     skills: ['Unity', 'C#', 'Game Development'],
     link: null,
-    media: [
-      { type: 'video', src: '/projects/roguelike/demo.mp4',         caption: 'Gameplay' },
-      { type: 'image', src: '/projects/roguelike/screenshot-1.png', caption: 'Screenshot' },
-    ],
+    media: [],
   },
   {
     id: 'pokemon-website',
@@ -281,9 +254,7 @@ export const projects: Project[] = [
       'Responsive site consuming PokéAPI to display comprehensive Pokémon stats, moves, and details.',
     skills: ['JavaScript', 'HTML', 'CSS', 'REST API'],
     link: null,
-    media: [
-      { type: 'image', src: '/projects/pokemon-website/screenshot-1.png', caption: 'Pokédex View' },
-    ],
+    media: [],
   },
 ];
 

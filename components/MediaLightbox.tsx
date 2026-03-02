@@ -40,13 +40,6 @@ export default function MediaLightbox({
     };
   }, [handleKey]);
 
-  // Reset video when navigating
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load();
-      videoRef.current.play().catch(() => {});
-    }
-  }, [currentIndex]);
 
   return (
     <div
@@ -86,25 +79,27 @@ export default function MediaLightbox({
         onClick={(e) => e.stopPropagation()}
         style={{ animation: 'fadeInUp 0.25s ease forwards' }}
       >
-        {item.type === 'image' ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={item.src}
-            alt={item.caption ?? ''}
-            className="rounded-xl object-contain"
-            style={{ maxHeight: '75vh', maxWidth: '100%', boxShadow: '0 0 60px rgba(0,0,0,0.6)' }}
-          />
-        ) : (
-          <video
-            ref={videoRef}
-            src={item.src}
-            controls
-            autoPlay
-            playsInline
-            className="rounded-xl"
-            style={{ maxHeight: '75vh', maxWidth: '100%', boxShadow: '0 0 60px rgba(0,0,0,0.6)' }}
-          />
-        )}
+      {item.type === 'image' ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={item.src}
+          alt={item.caption ?? ''}
+          className="rounded-xl object-contain"
+          style={{ maxHeight: '75vh', maxWidth: '90vw', boxShadow: '0 0 60px rgba(0,0,0,0.6)' }}
+        />
+      ) : (
+        <video
+          ref={videoRef}
+          controls
+          autoPlay
+          playsInline
+          className="rounded-xl"
+          style={{ maxHeight: '75vh', maxWidth: '90vw', boxShadow: '0 0 60px rgba(0,0,0,0.6)' }}
+        >
+          <source src={item.src} />
+          Your browser does not support HTML5 video.
+        </video>
+      )}
 
         {/* Caption + counter */}
         <div className="flex items-center gap-4">
