@@ -138,7 +138,10 @@ export const projects: Project[] = [
       'Led backend development for an enterprise HR platform with RFID time-in, leave management, and performance tracking. Architected the system and deployed across AWS EC2, Render, and HuggingFace.',
     skills: ['FastAPI', 'Angular', 'Docker', 'AWS EC2', 'Auth0', 'Supabase', 'OpenSearch'],
     link: null,
-    media: [],
+    media: [
+      { type: 'video', src: '/compilation/chronos/chronos_demo.mp4', caption: 'Demo' },
+      { type: 'video', src: '/compilation/chronos/chronos.mp4', caption: 'Overview' },
+    ],
   },
   {
     id: 'raspi-failsafe',
@@ -161,6 +164,20 @@ export const projects: Project[] = [
     skills: ['Linux', 'Ubuntu', 'Nginx', 'Docker', 'Cloudflare', 'Tailscale'],
     link: null,
     media: [],
+  },
+  {
+    id: 'inventory-system',
+    category: 'web',
+    prestige: 3,
+    name: 'Internal Inventory System',
+    description:
+      'Designed UI/UX and developed full-stack inventory management with NextJS, Express, MySQL, and Prisma. Role-based access, Agile workflow.',
+    skills: ['NextJS', 'Express', 'MySQL', 'Prisma', 'Figma'],
+    link: null,
+    media: [
+      { type: 'video', src: '/compilation/inventory%20system/inventory-system_demo.mp4', caption: 'Demo' },
+      { type: 'image', src: '/compilation/inventory%20system/Screenshot%202026-01-27%20125130.png', caption: 'Dashboard' },
+    ],
   },
   {
     id: 'resume-builder',
@@ -255,6 +272,43 @@ export const projects: Project[] = [
     skills: ['JavaScript', 'HTML', 'CSS', 'REST API'],
     link: null,
     media: [],
+  },
+];
+
+/**
+ * Highlights — hackathons, certifications, events.
+ * Add images to /public/certs/ (or any public subfolder) and reference them here.
+ * Example: "HackEstate 2025" with cert + participation photos.
+ */
+export interface Highlight {
+  id: string;
+  title: string;
+  subtitle?: string;
+  images: string[]; // e.g. /certs/cert.png, /certs/team-photo.jpg
+}
+
+export const highlights: Highlight[] = [
+  {
+    id: 'hackestate-2025',
+    title: 'HackEstate 2025',
+    subtitle: 'Filipino Homes',
+    images: [], // Add: /certs/hackestate-cert.png, /certs/hackestate-team.jpg, etc.
+  },
+  {
+    id: 'ict-congress',
+    title: 'ICT Congress',
+    images: [], // Add paths when you have them
+  },
+  {
+    id: 'python-opencv',
+    title: 'Python for Beginners',
+    subtitle: 'OpenCV Certificate',
+    images: ['/certs/Python%20Python%20For%20Beginners%20Certificate%20_%20OpenCV.png'],
+  },
+  {
+    id: 'eldroid',
+    title: 'ElDroid',
+    images: [], // Add cert/participation images
   },
 ];
 

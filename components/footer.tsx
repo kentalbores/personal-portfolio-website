@@ -72,7 +72,9 @@ export default function Footer() {
           </p>
 
           <a
-            href={`mailto:${personal.email}`}
+            href="/Resume%20-%20Kent%20Albores.pdf"
+            target="_blank"
+            rel="noreferrer"
             className="inline-flex items-center gap-3 px-8 py-4 text-base font-semibold btn-gradient"
             style={{ borderRadius: '10px' }}
           >
@@ -80,7 +82,7 @@ export default function Footer() {
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="white" strokeWidth="1.5"/>
               <path d="M22 6l-10 7L2 6" stroke="white" strokeWidth="1.5"/>
             </svg>
-            Say Hello
+            Resume
           </a>
 
           {/* Socials */}

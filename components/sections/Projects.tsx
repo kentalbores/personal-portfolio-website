@@ -16,31 +16,63 @@ const categoryColors: Record<string, string> = {
   game:           '#6366f1',
 };
 
-// ── Image thumbnail (only renders when src actually loads) ─────
+const MEDIA_HEIGHT = 140; // px — uniform for all cards
+
+// ── Placeholder (same size as media, for cards without or on load fail) ─
+function MediaPlaceholder({ accent, category }: { accent: string; category: string }) {
+  const primarySkill: Record<string, string> = {
+    enterprise: 'FastAPI',
+    infrastructure: 'Docker',
+    web: 'React',
+    automation: 'n8n',
+    desktop: 'Java',
+    game: 'Unity',
+  };
+  const skill = primarySkill[category] ?? 'React';
+
+  return (
+    <div
+      className="flex items-center justify-center shrink-0"
+      style={{
+        height: MEDIA_HEIGHT,
+        background: `linear-gradient(135deg, ${accent}08 0%, transparent 100%)`,
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+      }}
+    >
+      <div className="flex flex-col items-center gap-1.5 opacity-40">
+        <TechIcon name={skill} size={28} />
+        <span className="text-[10px] uppercase tracking-wider" style={{ color: accent, fontFamily: 'var(--font-geist-mono)' }}>
+          {category}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ── Image thumbnail (fixed height, fallback to placeholder on fail) ─
 function ImageThumb({
   item,
   accent,
   extraCount,
+  category,
   onClick,
 }: {
   item: ProjectMedia;
   accent: string;
   extraCount: number;
+  category: string;
   onClick: () => void;
 }) {
   const [status, setStatus] = useState<'loading' | 'ready' | 'failed'>('loading');
 
-  if (status === 'failed') return null;
+  if (status === 'failed') return <MediaPlaceholder accent={accent} category={category} />;
 
   return (
     <div
-      className="relative overflow-hidden cursor-pointer group"
+      className="relative overflow-hidden cursor-pointer group shrink-0"
       style={{
-        aspectRatio: '16 / 9',
+        height: MEDIA_HEIGHT,
         borderBottom: '1px solid rgba(255,255,255,0.05)',
-        // Collapsed until the image confirms it loaded
-        height: status === 'ready' ? undefined : 0,
-        overflow: status === 'ready' ? 'visible' : 'hidden',
       }}
       onClick={onClick}
     >
@@ -49,13 +81,12 @@ function ImageThumb({
         src={item.src}
         alt=""
         aria-hidden="true"
-        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
-        style={{ opacity: status === 'ready' ? 1 : 0, transition: 'opacity 0.4s ease' }}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        style={{ opacity: status === 'ready' ? 1 : 0 }}
         onLoad={() => setStatus('ready')}
         onError={() => setStatus('failed')}
       />
 
-      {/* Hover overlay */}
       <div
         className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         style={{ background: 'rgba(0,0,0,0.45)' }}
@@ -71,7 +102,6 @@ function ImageThumb({
         </span>
       </div>
 
-      {/* Extra count badge */}
       {extraCount > 0 && (
         <div
           className="absolute top-2 right-2 px-2 py-0.5 rounded text-xs"
@@ -84,16 +114,18 @@ function ImageThumb({
   );
 }
 
-// ── Video thumbnail (static — shows player on click) ──────────
+// ── Video thumbnail (fixed height, fallback on fail) ───────────
 function VideoThumb({
   item,
   accent,
   extraCount,
+  category,
   onClick,
 }: {
   item: ProjectMedia;
   accent: string;
   extraCount: number;
+  category: string;
   onClick: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -113,17 +145,15 @@ function VideoThumb({
     };
   }, []);
 
-  if (failed) return null;
+  if (failed) return <MediaPlaceholder accent={accent} category={category} />;
 
   return (
     <div
-      className="relative overflow-hidden cursor-pointer group"
+      className="relative overflow-hidden cursor-pointer group shrink-0"
       style={{
-        aspectRatio: '16 / 9',
+        height: MEDIA_HEIGHT,
         borderBottom: '1px solid rgba(255,255,255,0.05)',
         background: `${accent}08`,
-        height: canPlay ? undefined : 0,
-        overflow: canPlay ? 'visible' : 'hidden',
       }}
       onClick={onClick}
     >
@@ -134,7 +164,7 @@ function VideoThumb({
         playsInline
         preload="metadata"
         className="w-full h-full object-cover"
-        style={{ opacity: canPlay ? 1 : 0, transition: 'opacity 0.4s ease' }}
+        style={{ opacity: canPlay ? 1 : 0 }}
         onMouseEnter={() => videoRef.current?.play().catch(() => {})}
         onMouseLeave={() => {
           if (videoRef.current) {
@@ -144,7 +174,6 @@ function VideoThumb({
         }}
       />
 
-      {/* Play overlay */}
       <div
         className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         style={{ background: 'rgba(0,0,0,0.5)' }}
@@ -158,7 +187,6 @@ function VideoThumb({
         </span>
       </div>
 
-      {/* VIDEO label */}
       <div
         className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded text-xs"
         style={{ background: 'rgba(0,0,0,0.65)', color: accent, fontFamily: 'var(--font-geist-mono)' }}
@@ -179,19 +207,22 @@ function VideoThumb({
   );
 }
 
-// ── Smart media thumbnail (picks image or video component) ─────
-function MediaThumb({
-  media,
+// ── Media block: thumbnail or placeholder (always same height) ───
+function MediaBlock({
+  project,
   accent,
   onOpen,
 }: {
-  media: ProjectMedia[];
+  project: Project;
   accent: string;
   onOpen: (index: number) => void;
 }) {
-  if (!media.length) return null;
-  const first = media[0];
-  const extra = media.length - 1;
+  const hasMedia = (project.media ?? []).length > 0;
+
+  if (!hasMedia) return <MediaPlaceholder accent={accent} category={project.category} />;
+
+  const first = project.media![0];
+  const extra = project.media!.length - 1;
 
   if (first.type === 'image') {
     return (
@@ -199,6 +230,7 @@ function MediaThumb({
         item={first}
         accent={accent}
         extraCount={extra}
+        category={project.category}
         onClick={() => onOpen(0)}
       />
     );
@@ -208,6 +240,7 @@ function MediaThumb({
       item={first}
       accent={accent}
       extraCount={extra}
+      category={project.category}
       onClick={() => onOpen(0)}
     />
   );
@@ -219,13 +252,12 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState(0);
   const accent = categoryColors[project.category] ?? '#94a3b8';
-  const hasMedia = (project.media ?? []).length > 0;
 
   return (
     <>
       <div
         ref={ref}
-        className="glass-card overflow-hidden flex flex-col"
+        className="glass-card overflow-hidden flex flex-col min-h-[320px]"
         style={{
           opacity: isInView ? 1 : 0,
           transform: isInView ? 'translateY(0)' : 'translateY(24px)',
@@ -233,17 +265,15 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
           borderColor: `${accent}18`,
         }}
       >
-        {/* Thumbnail — only shows when media loads successfully */}
-        {hasMedia && (
-          <MediaThumb
-            media={project.media!}
-            accent={accent}
-            onOpen={(i) => { setLightboxIdx(i); setLightboxOpen(true); }}
-          />
-        )}
+        {/* Media block — always same height (thumbnail or placeholder) */}
+        <MediaBlock
+          project={project}
+          accent={accent}
+          onOpen={(i) => { setLightboxIdx(i); setLightboxOpen(true); }}
+        />
 
         {/* Card body */}
-        <div className="p-5 flex flex-col flex-1">
+        <div className="p-5 flex flex-col flex-1 min-h-0">
           {/* Category + prestige */}
           <div className="flex items-center justify-between mb-3">
             <span
@@ -278,8 +308,18 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
             {project.name}
           </h3>
 
-          {/* Description */}
-          <p className="text-xs leading-relaxed flex-1 mb-4" style={{ color: '#4b6080', lineHeight: 1.65 }}>
+          {/* Description — clamp to 3 lines */}
+          <p
+            className="text-xs leading-relaxed flex-1 mb-4"
+            style={{
+              color: '#4b6080',
+              lineHeight: 1.65,
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
             {project.description}
           </p>
 
@@ -323,7 +363,7 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
               </span>
             )}
 
-            {hasMedia && (
+            {(project.media?.length ?? 0) > 0 && (
               <button
                 onClick={() => { setLightboxIdx(0); setLightboxOpen(true); }}
                 className="inline-flex items-center gap-1.5 text-xs transition-colors duration-200"
@@ -359,7 +399,8 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
 export default function Projects() {
   const [filter, setFilter] = useState('all');
   const { ref, isInView } = useInView();
-  const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter);
+  const filtered = (filter === 'all' ? projects : projects.filter((p) => p.category === filter))
+    .sort((a, b) => (b.media?.length ?? 0) - (a.media?.length ?? 0)); // media first
 
   return (
     <section id="projects" className="py-28 px-6">
@@ -406,8 +447,8 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Grid — align-items: start so cards don't stretch to match tallest */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" style={{ alignItems: 'start' }}>
+        {/* Grid — uniform card heights via stretch + fixed media block */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((project, i) => (
             <ProjectCard key={project.id} project={project} delay={i * 55} />
           ))}

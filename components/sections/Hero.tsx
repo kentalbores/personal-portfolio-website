@@ -107,7 +107,7 @@ export default function Hero() {
               boxShadow: '0 0 8px rgba(34, 197, 94, 0.8)',
             }}
           />
-          Open to internships &amp; opportunities
+          Open for job opportunities
         </div>
 
         {/* Name */}

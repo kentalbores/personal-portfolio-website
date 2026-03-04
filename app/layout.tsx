@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "Kent B. Albores — Full-Stack Developer",
   description:
     "Portfolio of Kent B. Albores — Full-Stack Developer, Cybersecurity Enthusiast, and Automation Engineer based in Cebu, Philippines.",
+  icons: {
+    icon: "/icon.ico",
+  },
   keywords: [
     "Kent Albores",
     "Full-Stack Developer",

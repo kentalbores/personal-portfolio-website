@@ -1,15 +1,20 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { personal } from '@/lib/constants';
+import { personal, highlights } from '@/lib/constants';
 
-const links = [
+const baseLinks = [
   { label: 'About', href: '#about' },
   { label: 'Skills', href: '#skills' },
   { label: 'Experience', href: '#experience' },
   { label: 'Projects', href: '#projects' },
+  { label: 'Highlights', href: '#highlights' },
   { label: 'Education', href: '#education' },
   { label: 'Contact', href: '#contact' },
 ];
+
+const links = baseLinks.filter(
+  (l) => l.href !== '#highlights' || highlights.some((h) => h.images.length > 0)
+);
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -45,10 +50,11 @@ export default function Navbar() {
         <a
           href="#"
           onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-          className="font-bold text-xl tracking-tight gradient-text"
-          style={{ fontFamily: 'var(--font-geist-mono)' }}
+          className="flex items-center gap-2 shrink-0"
+          aria-label="Home"
         >
-          {personal.full_name.split(' ').map(w => w[0]).join('')}.
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icon.ico" alt="" width={32} height={32} className="rounded-md w-8 h-8 object-contain shrink-0" />
         </a>
 
         {/* Desktop links */}
@@ -70,18 +76,33 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Resume CTA */}
-        <a
-          href={personal.linked_in}
-          target="_blank"
-          rel="noreferrer"
-          className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm btn-outline"
-        >
-          <span>LinkedIn</span>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </a>
+        {/* Resume + LinkedIn */}
+        <div className="hidden md:flex items-center gap-2">
+          <a
+            href="/Resume%20-%20Kent%20Albores.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm btn-gradient"
+            style={{ borderRadius: '8px' }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="1.5"/>
+              <path d="M22 6l-10 7L2 6" stroke="currentColor" strokeWidth="1.5"/>
+            </svg>
+            Resume
+          </a>
+          <a
+            href={personal.linked_in}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm btn-outline"
+          >
+            <span>LinkedIn</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
+        </div>
 
         {/* Mobile burger */}
         <button
@@ -136,12 +157,20 @@ export default function Navbar() {
               </a>
             </li>
           ))}
-          <li className="pt-4">
+          <li className="pt-4 space-y-2">
+            <a
+              href="/Resume%20-%20Kent%20Albores.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="block text-center py-2.5 text-sm btn-gradient rounded-lg"
+            >
+              Resume
+            </a>
             <a
               href={personal.linked_in}
               target="_blank"
               rel="noreferrer"
-              className="block text-center py-2.5 text-sm btn-gradient rounded-lg"
+              className="block text-center py-2.5 text-sm btn-outline rounded-lg"
             >
               LinkedIn
             </a>

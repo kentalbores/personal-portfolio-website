@@ -89,14 +89,15 @@ export default function MediaLightbox({
         />
       ) : (
         <video
+          key={item.src}
           ref={videoRef}
           controls
           autoPlay
           playsInline
           className="rounded-xl"
           style={{ maxHeight: '75vh', maxWidth: '90vw', boxShadow: '0 0 60px rgba(0,0,0,0.6)' }}
+          src={item.src}
         >
-          <source src={item.src} />
           Your browser does not support HTML5 video.
         </video>
       )}
